@@ -24,7 +24,9 @@ g++ EmployeeManagement.cpp -o EmployeeManagement
 ```
 Notes
  • The program uses dynamic memory allocation and a singly linked list.
+ • Employee data is saved locally in a CSV file (Employees.csv) on your machine only, and is not included in the repository.
  • The name input reads one word. To handle full names with spaces, modify cin to getline.
+
 
  ```cpp
 cin.ignore();
