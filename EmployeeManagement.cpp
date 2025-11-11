@@ -1,4 +1,6 @@
 #include<iostream>
+#include<fstream>
+#include<cstring>
 using namespace std;
 
 typedef struct employes{
@@ -11,6 +13,42 @@ typedef struct employes{
 
 employes *Head = NULL;
 
+void SaveToFile(employes *Emp){
+    std::ofstream file("Employees.csv", std::ios::app);
+    if(file.is_open()){
+        file << Emp->EmplID << "," << Emp->name << "," << Emp->age << "," << Emp->salary << std::endl;
+        file.close();
+    }
+}
+void LoadFromFile(){
+    std::ifstream file("Employees.csv");
+    if(file.is_open()){
+        std::string line;
+        while(std::getline(file, line)){
+            employes *Emp = new employes;
+            size_t pos = 0;
+            std::string token;
+            
+            pos = line.find(",");
+            Emp->EmplID = std::stoi(line.substr(0,pos));
+            line.erase(0,pos+1);
+            
+            pos = line.find(",");
+            strcpy(Emp->name, line.substr(0,pos).c_str());
+            line.erase(0,pos+1);
+            
+            pos = line.find(",");
+            Emp->age = std::stoi(line.substr(0,pos));
+            line.erase(0,pos+1);
+            
+            Emp->salary = std::stof(line);
+
+            Emp->next = Head;
+            Head = Emp;
+        }
+        file.close();
+    }
+}
 void AddEmpl(){
     employes * Empl = new employes;
     if(Empl == NULL){
@@ -27,6 +65,7 @@ void AddEmpl(){
     cin >> Empl->salary;
     Empl->next = Head;
     Head = Empl;
+    SaveToFile(Empl);
 }
 void DeleteEmpl(){
     int NumDelEmpl ;
@@ -97,6 +136,7 @@ void SearchEmp(){
  }
 
  int main(){
+    LoadFromFile();
     int choice;
     do{
         cout << "\n--- Employee Management System ---" << endl;
